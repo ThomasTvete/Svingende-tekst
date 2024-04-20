@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        text {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-size: 250%;
+        }
+
+        /* .canvas{
+            padding:0;
+            margin:0;
+            width: 100%;
+            height: 30%;
+        } */
+    </style>
+    <!-- <script src="canvas.js" defer
+></script> -->
+</head>
+
+<body>
+    <svg width="100%" height="50">
+        <rect x="0" y="0" width="100%" height="100%" fill="lightgray" />
+        <g id="logos"></g>
+    </svg>
+    <br />
+    <!-- <input type="range" min="0" max="86" step="1" oninput="moveLogo(this)"> -->
+    <script>
+        // let txt = document.getElementById("logo");
+        // let txt2 = document.getElementById("logo2");
+        // let x = 0;
+        // let angle = 0;
+
+        class logo {
+            constructor(speed, id, text, color) {
+                this._speed = speed;
+                this._id = id;
+                this._text = text;
+                this._color = color;
+                this._x = 0;
+                this._angle = 0;
+            }
+
+            getText() {
+                return /*HTML*/ `
+                <text id=${this._id} x="0" y="36" fill=${this._color}>${this._text}</text>
+                `;
+            }
+
+            updateX() {
+                // terjes formel for svingende tekst:
+                this._angle = this._x >= 100 ? -30 : (this._angle + this._speed) % 360;
+                this._x = Math.round(40 + 40 * Math.sin(Math.PI * this._angle / 180));
+                
+                // enkel formel for scrollende banner:
+                // ("-50" er hardkoding av "offscreen spawning" for ordene, 
+                // kanskje det finnes en attribut som setter x-koordinaten til det siste tegnet i stringen?)
+                // this._angle = this._x >= 100 ? -50 : this._angle + this._speed;
+                // this._x = this._angle;
+
+                $(this._id).setAttribute('x', this._x + '%');
+
+            }
+        }
+
+        const logoObj = [
+            new logo(1, 'logo1', 'THOMAS', 'red'),
+            new logo(1.5, 'logo2', 'ER', 'green'),
+            new logo(2, 'logo3', 'KUL', 'orange'),
+            // {
+            //     speed: 1,
+            //     id: 'logo',
+            //     text: 'THOMAS',
+            //     color: 'red',
+            // },
+            // {
+            //     speed: 2,
+            //     id: 'logo2',
+            //     text: 'ER',
+            //     color: 'green',
+            // },
+            // {
+            //     speed: 3,
+            //     id: 'logo3',
+            //     text: 'KUL',
+            //     color: 'orange',
+            // },
+        ];
+
+        createText();
+
+        setInterval(moveLogo, 30)
+
+        function $(x) { return document.getElementById(x); }
+
+        function createText() {
+            for (let logo of logoObj) {
+                $('logos').innerHTML += logo.getText();
+            }
+        }
+
+        function moveLogo() {
+            // let x = range.value + '%';
+            // x++;
+            for (let logo of logoObj) {
+                logo.updateX();
+            }
+        }
+    </script>
+
+
+    <!-- <canvas id="myHeader" class="canvas">
+</canvas>
+
+<script>
+    
+</script> -->
+</body>
+
+</html>
